@@ -150,12 +150,13 @@ export default function ProductDetails() {
                         {/* Options */}
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h2 className="sr-only">Product information</h2>
+
                             <div className='flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6'>
                                 <p className='font-semibold'> 199</p>
                                 <p className='opacity-50 line-through'>211</p>
                                 <p className='text-green-600 font-semibold'> 5%</p>
-
                             </div>
+                            
                             {/* Reviews */}
                             <div className="mt-6">
                                 <div className='flex items-center space-x-3'>
@@ -343,7 +344,6 @@ export default function ProductDetails() {
                 <section className='pt-10'>
 
                     <h1 className='py-5 text-xl font-bold'>Similar Products</h1>
-
                     <div className='flex flex-wrap space-y-5'>
                           {mens_kurta.map((item)=><HomeSectionCard product={item}/>)}                  
                     </div>
