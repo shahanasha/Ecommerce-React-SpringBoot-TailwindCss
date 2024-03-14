@@ -1,11 +1,15 @@
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
 import { navigations } from './nav'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import AuthModal from '../../Auth/AuthModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser, logout } from '../../../State/Auth/Action'
+import { LOGOUT } from '../../../State/Auth/ActionType'
 
 const navigation = {
   categories: [
@@ -144,6 +148,12 @@ export default function Navigation() {
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [anchorE1, setAnchorE1] = useState(null);
   const openUserMenu = Boolean(anchorE1);
+  const {auth}=useSelector(store=>store);
+  const jwt=localStorage.getItem("jwt");
+
+  const location=useLocation();
+
+  const dispatch=useDispatch();
 
   const handleUserClick = (event) => {
     setAnchorE1(event.currentTarget);
@@ -159,12 +169,36 @@ export default function Navigation() {
 
   const handleClose = () => {
     setOpenAuthModal(false);
+    
   }
 
   const handleCategoryClick = (category, section, item, close) => {
     navigate(`/${category.id}/${section.id}/${item.id}`)
     close();
   };
+
+  useEffect(()=>{
+    if(jwt){
+        dispatch(getUser(jwt))
+        }
+     },[jwt,auth.jwt])
+
+  useEffect(()=>{
+    if(auth.user){
+      handleClose()
+    }
+    if(location.pathname==="/login" || location.pathname==="/register"){
+      navigate(-1);
+    }
+  },[auth.user])
+
+
+  const handleLogout=()=>{
+    dispatch(logout())
+    handleCloseUserMenu()
+  }
+
+
 
   return (
     <div className="bg-white z-50" style={{ zIndex: 1000 }}>
@@ -454,7 +488,7 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {true ? (
+                  {auth.user?.firstName ? (
                     <div>
                       <Avatar
                         className="text-white"
@@ -467,7 +501,7 @@ export default function Navigation() {
                           color: "white",
                           cursor: "pointer",
                         }}
-                      > S
+                      > {auth.user?.firstName[0].toUpperCase()}
                       </Avatar>
                       <Menu
                         id="basic-menu"
@@ -484,8 +518,8 @@ export default function Navigation() {
                         <MenuItem onClick={()=>navigate("account/order")} >
                           My Orders
                         </MenuItem>
-                        <MenuItem >
-                          Logout
+                        <MenuItem onClick={handleLogout}>
+                            Logout
                         </MenuItem>
                       </Menu>
                     </div>
@@ -528,6 +562,9 @@ export default function Navigation() {
           </div>
         </nav>
       </header>
+
+      <AuthModal handleClose={handleClose} open={openAuthModal}/>
+
     </div>
   )
 }
