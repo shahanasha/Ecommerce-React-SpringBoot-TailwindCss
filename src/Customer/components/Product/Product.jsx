@@ -6,11 +6,12 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import { mens_kurta } from '../../../Data/mens_kurta'
 import ProductCard from './ProductCard'
 import { color, filters, singleFilter } from './FilterData'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import { FormControl, FormControlLabel, FormLabel, Pagination, Radio, RadioGroup } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { findProducts } from '../../../State/Product/Action'
+import { store } from '../../../State/store'
 
 const sortOptions = [
     { name: 'Price: Low to High', href: '#', current: false },
@@ -27,7 +28,8 @@ export default function Product() {
     const location = useLocation();
     const navigate = useNavigate();
     const param = useParams();
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
+    const { products } = useSelector(store => store);
 
     const decodedQuesryString = decodeURIComponent(location.search);
     const searchParams = new URLSearchParams(decodedQuesryString);
@@ -76,20 +78,27 @@ export default function Product() {
 
     }
 
-    useEffect(() => {
-        const [minPrice,maxPrice]=priceValue===null?[0,10000]:priceValue.split("-").map(Number);
+    const handlePaginationChange = (event,value)=>{
+        const searchParams=new URLSearchParams(location.search)
+        searchParams.set("page",value);
+        const query=searchParams.toString();
+        navigate({search:`?${query}`})
+    }
 
-        const data={
-            category:param.levelThree,
-            colors:colorValue || [],
-            sizes:sizeValue || [],
+    useEffect(() => {
+        const [minPrice, maxPrice] = priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
+
+        const data = {
+            category: param.levelThree,
+            colors: colorValue || [],
+            sizes: sizeValue || [],
             minPrice,
             maxPrice,
-            minDiscount:discount || 0,
-            sort:sortValue || "price_low",
-            pageNumber : pageNumber - 1,
-            pageSize : 10,
-            stock:stock
+            minDiscount: discount || 0,
+            sort: sortValue || "price_low",
+            pageNumber: pageNumber - 1,
+            pageSize: 10,
+            stock: stock
         }
         dispatch(findProducts(data))
 
@@ -99,7 +108,7 @@ export default function Product() {
         priceValue,
         discount,
         sortValue,
-        pageNumber, 
+        pageNumber,
         stock
     ])
 
@@ -406,10 +415,15 @@ export default function Product() {
                             <div className="lg:col-span-3 w-full">
 
                                 <div className='flex flex-wrap justify-center bg-white py-5'>
-                                    {mens_kurta.map((item) => <ProductCard product={item} />)}
+                                    {products.products && products.products?.content?.map((item) => <ProductCard product={item} />)}
                                 </div>
 
                             </div>
+                        </div>
+                    </section>
+                    <section className='w-full px=[3.6rem]'>
+                        <div className='px-4 py-5 flex justify-center'>
+                        <Pagination count={products.products?.totalPages} color="secondary"  onChange={handlePaginationChange}/>                                  
                         </div>
                     </section>
                 </main>

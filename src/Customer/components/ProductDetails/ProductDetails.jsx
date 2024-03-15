@@ -1,32 +1,14 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
 import { mens_kurta } from '../../../Data/mens_kurta'
 import HomeSectionCard from '../HomeSectionCard/HomeSectionCard'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { findProductsById } from '../../../State/Product/Action'
+import { store } from '../../../State/store'
 
 const product = {
     name: 'Basic Tee 6-Pack',
@@ -85,13 +67,21 @@ function classNames(...classes) {
 }
 
 export default function ProductDetails() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+    const [selectedSize, setSelectedSize] = useState("")
     const navigate=useNavigate();
+    const params=useParams();
+    const dispatch=useDispatch();
+    const {products}=useSelector(store=>store)
 
     const handleAddToCart=()=>{
         navigate("/cart")
     }
+
+    useEffect(()=>{
+        const data={productId:params.productId}
+        dispatch(findProductsById(data))
+
+    },[params.productId])
 
     return (
         <div className="bg-white lg:px-20">
@@ -130,8 +120,8 @@ export default function ProductDetails() {
                     <div className="flex flex-col item-center pl-10">
                         <div className="overflow-hidden rounded-lg max-w-[30rem] max-h[35rem]">
                             <img
-                                src={product.images[0].src}
-                                alt={product.images[0].alt}
+                                src={products.product?.imgUrl} // Use products.product.imgUrl for the main product image
+                                alt={products.product?.title}
                                 className="h-full w-full object-cover object-center"
                             />
                         </div>
