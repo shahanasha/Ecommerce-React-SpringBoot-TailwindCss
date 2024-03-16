@@ -10,6 +10,7 @@ import Product from './Customer/components/Product/Product';
 import ProductDetails from './Customer/components/ProductDetails/ProductDetails';
 import HomePage from './Customer/pages/HomePage/HomePage';
 import CustomerRouters from './Routers/CustomerRouters';
+import AdminRouters from './Routers/AdminRouters';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       
       <Routes>
         <Route path='/*' element={<CustomerRouters/>} ></Route>
+        <Route path='/admin/*' element={<AdminRouters/>}></Route>
       </Routes>
     
     </div>
