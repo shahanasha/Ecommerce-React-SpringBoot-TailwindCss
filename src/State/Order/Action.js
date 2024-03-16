@@ -29,15 +29,13 @@ export const createOrder= (reqData) => async (dispatch)=>{
 }
 
 
-export const getOrderById= (reqData) => async (dispatch)=>{
+export const getOrderById= (orderId) => async (dispatch)=>{
     dispatch({type : GET_OREDER_BY_ID_FAILURE});
-    const { orderId} = reqData;
-   
+    
     try {
         const {data}=await api.get(`/api/orders/${orderId}`,
            
     );
-    
     console.log("order by id ", data);
     dispatch({
         type:GET_OREDER_BY_ID_SUCCESS,

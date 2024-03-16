@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { findProductsById } from '../../../State/Product/Action'
 import { store } from '../../../State/store'
+import { addItemToCart } from '../../../State/Cart/Action'
 
 const product = {
     name: 'Basic Tee 6-Pack',
@@ -68,20 +69,23 @@ function classNames(...classes) {
 
 export default function ProductDetails() {
     const [selectedSize, setSelectedSize] = useState("")
-    const navigate=useNavigate();
-    const params=useParams();
-    const dispatch=useDispatch();
-    const {products}=useSelector(store=>store)
+    const navigate = useNavigate();
+    const params = useParams();
+    const dispatch = useDispatch();
+    const { products } = useSelector(store => store)
 
-    const handleAddToCart=()=>{
+    const handleAddToCart = () => {
+        const data={productId:params.productId,size:selectedSize.name}
+        dispatch(addItemToCart(data))
+        console.log("data_",data)
         navigate("/cart")
     }
 
-    useEffect(()=>{
-        const data={productId:params.productId}
+    useEffect(() => {
+        const data = { productId: params.productId }
         dispatch(findProductsById(data))
 
-    },[params.productId])
+    }, [params.productId])
 
     return (
         <div className="bg-white lg:px-20">
@@ -139,8 +143,12 @@ export default function ProductDetails() {
                     {/* Product info */}
                     <div className="lg:col-span-1 max-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8lg:pb-24">
                         <div className="lg:col-span-2 ">
-                            <h1 className="text-lg lg:text-xl font-semibold text-gray-900">Brand</h1>
-                            <h1 className='tex-lg lg:text-xl text-gray-900 opacity-60 pt-1'>Title</h1>
+                            <h1 className="text-lg lg:text-xl font-semibold text-gray-900">
+                                {products.product?.brand}
+                            </h1>
+                            <h1 className='tex-lg lg:text-xl text-gray-900 opacity-60 pt-1'>
+                                {products.product?.title}
+                            </h1>
                         </div>
 
                         {/* Options */}
@@ -148,11 +156,17 @@ export default function ProductDetails() {
                             <h2 className="sr-only">Product information</h2>
 
                             <div className='flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6'>
-                                <p className='font-semibold'> 199</p>
-                                <p className='opacity-50 line-through'>211</p>
-                                <p className='text-green-600 font-semibold'> 5%</p>
+                                <p className='font-semibold'>
+                                    {products.product?.discountedPrice}
+                                </p>
+                                <p className='opacity-50 line-through'>
+                                    {products.product?.price}
+                                </p>
+                                <p className='text-green-600 font-semibold'>
+                                    {products.product?.discountPercent}% off
+                                </p>
                             </div>
-                            
+
                             {/* Reviews */}
                             <div className="mt-6">
                                 <div className='flex items-center space-x-3'>
@@ -341,7 +355,7 @@ export default function ProductDetails() {
 
                     <h1 className='py-5 text-xl font-bold'>Similar Products</h1>
                     <div className='flex flex-wrap space-y-5'>
-                          {mens_kurta.map((item)=><HomeSectionCard product={item}/>)}                  
+                        {mens_kurta.map((item) => <HomeSectionCard product={item} />)}
                     </div>
 
                 </section>

@@ -51,7 +51,7 @@ const RegistrationForm = () => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                     required
-                    id="lasttName"
+                    id="lastName"
                     name='lastName'
                     label='Last Name'
                     fullWidth
