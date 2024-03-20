@@ -17,7 +17,7 @@ const menu = [
     { name: "Dashboard", path: "/admin", icon: <DashboardIcon /> },
     { name: "Products", path: "/admin/products", icon: <ShoppingCartIcon /> },
     { name: "Customers", path: "/admin/customers", icon: <PersonIcon /> },
-    { name: "Orders", path: "admin/orders", icon: <ShoppingCartIcon /> },
+    { name: "Orders", path: "/admin/orders", icon: <ShoppingCartIcon /> },
     { name: "AddProduct", path: "/admin/product/create", icon: <ControlPointIcon /> },
 ]
 
@@ -68,17 +68,17 @@ const Admin = () => {
 
 
     return (
-        <div>
 
-            <div className='flex h-[100vh] '>
+
+            <div className='relative flex h-[100vh] '>
 
                 <CssBaseline />
 
-                   <div className='w-[15%] '>
+                   <div className='w-[15%] border border-r-gray-300 h-full fixed top-0'>
                         {drawer}
                    </div>
                 
-                <div className='w-[85%] border border-r-gray-300 h-full'>
+                <div className='w-[85%] h-full ml-44'>
 
                     <Routes>
 
@@ -92,7 +92,7 @@ const Admin = () => {
                 </div>
 
             </div>
-        </div>
+
     )
 }
 

@@ -43,7 +43,7 @@ export const findProductsById = (reqData) => async (dispatch) => {
 export const createProduct=(product)=> async(dispatch)=>{
     try {
         dispatch({type:CREATE_PRODUCT_REQUEST})
-        const {data}=await api.post(`${API_BASE_URL}/api/admin/products`,product);
+        const {data}=await api.post(`/api/admin/products/`,product);
         console.log("created products",data)
         dispatch({
             type:CREATE_PRODUCT_SUCCESS,
@@ -59,7 +59,7 @@ export const deleteProduct=(productId)=> async(dispatch)=>{
     try {
         dispatch({type:DELETE_PRODUCT_REQUEST})
 
-        const {data}=await api.delete(`${API_BASE_URL}/api/admin/products/${productId}/delete`);
+        const {data}=await api.delete(`/api/admin/products/${productId}/delete`);
         console.log("delete product",data)
         dispatch({
             type:DELETE_PRODUCT_SUCCESS,
