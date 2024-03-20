@@ -8,9 +8,9 @@ export const getOrders = () => {
         dispatch({ type: GET_ORDER_REQUEST })
 
         try {
-            const response = await api.get(`/api/admin/orders`);
+            const response = await api.get(`/api/admin/orders/`);
             console.log("get all orders", response.data);
-            dispatch({ type: GET_ORDER_SUCCESS, payload: response.reqData })
+            dispatch({ type: GET_ORDER_SUCCESS, payload: response.data })
         } catch (error) {
             console.log("catch error", error);
             dispatch({ type: GET_ORDER_FAILURE, payload: error.message })
@@ -24,7 +24,7 @@ export const confirmOrders = (orderId) => async (dispatch) => {
     dispatch({ type: CONFIRMED_OREDER_REQUEST });
 
     try {
-        const response = await api.put(`/api/admin/orders/${orderId}/consfirmed`);
+        const response = await api.put(`/api/admin/orders/${orderId}/confirmed`);
         const data = response.data;
         console.log("confirm_order", data);
         dispatch({ type: CONFIRMED_OREDER_SUCCESS, payload: data })
@@ -36,7 +36,7 @@ export const confirmOrders = (orderId) => async (dispatch) => {
 }
 
 
-export const shipOrders = (orderId) => async (dispatch) => {
+export const shipOrders = (orderId) => {
     return async (dispatch) => {
         try {
             dispatch({ type: SHIP_ORDER_REQUEST })
@@ -75,7 +75,7 @@ export const deliverOrders = (orderId) => async (dispatch) => {
 //         }
 // }
 
-export const deleteOrders = (orderId) => async (dispatch) => {
+export const deleteOrders = (orderId) =>  {
     return async (dispatch) => {
         dispatch({type:DELETE_ORDER_REQUEST})
 

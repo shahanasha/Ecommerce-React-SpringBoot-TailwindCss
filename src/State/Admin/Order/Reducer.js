@@ -16,6 +16,7 @@ const adminOrderReducer = (state = initialState,action)=> {
             };
         case GET_ORDER_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 orders: action.payload,
                 error: "",
@@ -48,7 +49,7 @@ const adminOrderReducer = (state = initialState,action)=> {
         case DELIVERED_ORDER_SUCCESS:
             return{
                 ...state,
-                deliverd:action.payload,
+                delivered:action.payload,
                 loading:false,
             }
         
@@ -64,7 +65,7 @@ const adminOrderReducer = (state = initialState,action)=> {
         case DELETE_ORDER_REQUEST:
             return { ...state,loading:true};
         case DELETE_ORDER_SUCCESS:
-            return { ...state ,loading:false,orders:state.orders.filter((order)=>order.id!==action.payload)}
+            return { ...state ,loading:false,deletedOrder:state.orders.filter((order)=>order.id!==action.payload)}
         case DELETE_ORDER_FAILURE :
             return {...state,loading:false,error:action.payload};
 
